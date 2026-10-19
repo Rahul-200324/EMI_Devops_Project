@@ -1,0 +1,21 @@
+CREATE DATABASE IF NOT EXISTS emi_calculator;
+
+USE emi_calculator;
+
+CREATE TABLE IF NOT EXISTS users (
+
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    name VARCHAR(100) NOT NULL,
+
+    email VARCHAR(150) NOT NULL UNIQUE,
+
+    phone VARCHAR(10) NOT NULL,
+
+    age INT NOT NULL,
+
+    purpose TEXT NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);

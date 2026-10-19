@@ -1,0 +1,570 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EMI Calculator | Financial Planning</title>
+
+    <meta name="description"
+          content="Calculate monthly EMI, total interest, total loan repayment and view your loan amortization schedule.">
+
+    <!-- CSS: Flask static folder -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Optional icon library, if used by your CSS/HTML -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar" id="appNavbar">
+        <div class="nav-container">
+
+            <a href="{{ url_for('main') }}" class="brand-logo"
+               id="brandLogoLink">
+
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <rect x="4" y="2" width="16" height="20" rx="2"/>
+                        <line x1="8" y1="6" x2="16" y2="6"/>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01
+                                 M8 14h.01M12 14h.01M16 14h.01
+                                 M8 18h.01M12 18h.01"/>
+                    </svg>
+                </div>
+
+                <div class="brand-text">
+                    <h1>EMI Calculator</h1>
+                    <span class="brand-tag">
+                        Financial Planning &amp; Loan Estimation
+                    </span>
+                </div>
+            </a>
+
+            <div class="nav-badge" id="currencyBadge">
+                <span>🇮🇳</span> INR (₹)
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main-content" id="mainContent">
+
+        <!-- LOAN PRESETS -->
+        <section class="preset-section" aria-label="Loan Presets">
+
+            <div class="preset-header">
+                <span>⚡</span>
+                <span>Popular Loan Presets</span>
+            </div>
+
+            <div class="preset-buttons" id="presetButtonsGroup">
+
+                <button type="button" class="preset-btn"
+                        data-preset="home" id="presetHomeBtn">
+                    🏠 Home Loan (₹30L @ 8.5%, 20Y)
+                </button>
+
+                <button type="button" class="preset-btn"
+                        data-preset="car" id="presetCarBtn">
+                    🚗 Car Loan (₹8L @ 9.0%, 5Y)
+                </button>
+
+                <button type="button" class="preset-btn"
+                        data-preset="personal" id="presetPersonalBtn">
+                    💼 Personal Loan (₹3L @ 12.0%, 3Y)
+                </button>
+
+                <button type="button" class="preset-btn"
+                        data-preset="education" id="presetEducationBtn">
+                    🎓 Education Loan (₹15L @ 9.5%, 7Y)
+                </button>
+
+            </div>
+        </section>
+
+
+        <!-- CALCULATOR GRID -->
+        <div class="calculator-grid" id="calcGrid">
+
+            <!-- INPUT CARD -->
+            <section class="calc-card input-card" id="loanInputCard">
+
+                <h2 class="card-title">
+                    Loan Parameters
+                </h2>
+
+                <p class="card-subtitle">
+                    Enter your loan details or use the sliders to calculate
+                    your monthly installment.
+                </p>
+
+                <form id="emiForm" novalidate>
+
+                    <!-- LOAN AMOUNT -->
+                    <div class="form-group" id="loanAmountGroup">
+
+                        <div class="form-label-row">
+                            <label for="loanAmount" class="form-label">
+                                Loan Amount
+                            </label>
+                            <span class="unit-tag">Rupees</span>
+                        </div>
+
+                        <div class="input-wrapper">
+                            <span class="input-prefix">₹</span>
+
+                            <input type="number"
+                                   id="loanAmount"
+                                   name="loanAmount"
+                                   class="number-input has-prefix"
+                                   min="10000"
+                                   max="100000000"
+                                   step="10000"
+                                   value="500000"
+                                   required>
+                        </div>
+
+                        <div class="slider-container">
+                            <input type="range"
+                                   id="loanAmountSlider"
+                                   class="range-slider"
+                                   min="10000"
+                                   max="100000000"
+                                   step="10000"
+                                   value="500000"
+                                   aria-label="Loan amount slider">
+
+                            <div class="slider-limits">
+                                <span>₹10K</span>
+                                <span>₹50 Lakh</span>
+                                <span>₹1 Crore</span>
+                            </div>
+                        </div>
+
+                        <div class="error-msg" id="amountError" role="alert">
+                            Please enter a valid loan amount.
+                        </div>
+                    </div>
+
+
+                    <!-- INTEREST RATE -->
+                    <div class="form-group" id="interestRateGroup">
+
+                        <div class="form-label-row">
+                            <label for="interestRate" class="form-label">
+                                Annual Interest Rate
+                            </label>
+                            <span class="unit-tag">% per annum</span>
+                        </div>
+
+                        <div class="input-wrapper">
+                            <input type="number"
+                                   id="interestRate"
+                                   name="interestRate"
+                                   class="number-input has-suffix"
+                                   min="0"
+                                   max="50"
+                                   step="0.1"
+                                   value="8.5"
+                                   required>
+
+                            <span class="input-suffix">%</span>
+                        </div>
+
+                        <div class="slider-container">
+                            <input type="range"
+                                   id="interestRateSlider"
+                                   class="range-slider"
+                                   min="0"
+                                   max="30"
+                                   step="0.1"
+                                   value="8.5"
+                                   aria-label="Interest rate slider">
+
+                            <div class="slider-limits">
+                                <span>0%</span>
+                                <span>15%</span>
+                                <span>30%</span>
+                            </div>
+                        </div>
+
+                        <div class="error-msg" id="rateError" role="alert">
+                            Enter an interest rate between 0% and 50%.
+                        </div>
+                    </div>
+
+
+                    <!-- LOAN TENURE -->
+                    <div class="form-group" id="loanTenureGroup">
+
+                        <div class="form-label-row">
+                            <label for="loanTenure" class="form-label">
+                                Loan Tenure
+                            </label>
+                            <span class="unit-tag">Years</span>
+                        </div>
+
+                        <div class="input-wrapper">
+                            <input type="number"
+                                   id="loanTenure"
+                                   name="loanTenure"
+                                   class="number-input has-suffix"
+                                   min="1"
+                                   max="40"
+                                   step="1"
+                                   value="5"
+                                   required>
+
+                            <span class="input-suffix">Years</span>
+                        </div>
+
+                        <div class="slider-container">
+                            <input type="range"
+                                   id="loanTenureSlider"
+                                   class="range-slider"
+                                   min="1"
+                                   max="40"
+                                   step="1"
+                                   value="5"
+                                   aria-label="Loan tenure slider">
+
+                            <div class="slider-limits">
+                                <span>1 Year</span>
+                                <span>20 Years</span>
+                                <span>40 Years</span>
+                            </div>
+                        </div>
+
+                        <div class="error-msg" id="tenureError" role="alert">
+                            Enter a loan tenure between 1 and 40 years.
+                        </div>
+                    </div>
+
+
+                    <!-- BUTTONS -->
+                    <div class="button-group">
+
+                        <button type="button"
+                                class="btn btn-primary"
+                                id="calculateBtn">
+                            Calculate EMI
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-secondary"
+                                id="resetBtn">
+                            Reset
+                        </button>
+
+                    </div>
+
+                </form>
+            </section>
+
+
+            <!-- RESULTS CARD -->
+            <section class="calc-card results-card" id="resultsCard">
+
+                <!-- MONTHLY EMI -->
+                <div class="emi-highlight-box" id="emiHighlightBox">
+
+                    <div class="box-label">
+                        <span>Monthly EMI</span>
+                        <span class="period-badge">Per Month</span>
+                    </div>
+
+                    <div class="box-value" id="monthlyEmi">
+                        ₹ 10,258
+                    </div>
+
+                    <div class="box-subtext">
+                        Equated Monthly Installment payable each month
+                    </div>
+
+                </div>
+
+
+                <!-- SUMMARY METRICS -->
+                <div class="metrics-summary-grid" id="metricsSummaryGrid">
+
+                    <div class="metric-item" id="metricPrincipalCard">
+
+                        <div class="metric-info">
+                            <div class="metric-dot dot-principal"></div>
+
+                            <div>
+                                <div class="metric-label">
+                                    Principal Loan Amount
+                                </div>
+
+                                <div class="metric-percentage"
+                                     id="principalPercent">
+                                    81.2%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-value" id="principalAmount">
+                            ₹ 5,00,000
+                        </div>
+
+                    </div>
+
+
+                    <div class="metric-item" id="metricInterestCard">
+
+                        <div class="metric-info">
+                            <div class="metric-dot dot-interest"></div>
+
+                            <div>
+                                <div class="metric-label">
+                                    Total Interest Payable
+                                </div>
+
+                                <div class="metric-percentage"
+                                     id="interestPercent">
+                                    18.8%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-value" id="totalInterest">
+                            ₹ 1,15,452
+                        </div>
+
+                    </div>
+
+
+                    <div class="metric-item" id="metricTotalCard">
+
+                        <div class="metric-info">
+                            <div class="metric-dot dot-total"></div>
+
+                            <div>
+                                <div class="metric-label">
+                                    Total Amount Payable
+                                </div>
+
+                                <div class="metric-percentage">
+                                    Principal + Interest
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-value" id="totalPayment">
+                            ₹ 6,15,452
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DONUT CHART -->
+                <div class="chart-container" id="chartContainer">
+
+                    <div class="donut-wrapper">
+
+                        <svg class="donut-svg" viewBox="0 0 100 100"
+                             role="img"
+                             aria-label="Principal and interest distribution">
+
+                            <circle class="donut-bg"
+                                    cx="50" cy="50" r="40">
+                            </circle>
+
+                            <circle id="donutPrincipal"
+                                    class="donut-segment-principal"
+                                    cx="50" cy="50" r="40">
+                            </circle>
+
+                            <circle id="donutInterest"
+                                    class="donut-segment-interest"
+                                    cx="50" cy="50" r="40">
+                            </circle>
+
+                        </svg>
+
+                        <div class="donut-center-text">
+                            <div class="center-title">Ratio</div>
+                            <div class="center-ratio" id="donutRatioText">
+                                81 : 19
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-legend" id="chartLegend">
+
+                        <div class="legend-item">
+                            <div class="legend-box legend-principal"></div>
+                            <span>Principal Loan Amount</span>
+                        </div>
+
+                        <div class="legend-item">
+                            <div class="legend-box legend-interest"></div>
+                            <span>Total Interest</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+
+        <!-- REPAYMENT SCHEDULE -->
+        <section class="schedule-section"
+                 id="scheduleSection"
+                 aria-label="Amortization Breakdown">
+
+            <div class="schedule-header">
+
+                <h2>Repayment Schedule Breakdown</h2>
+
+                <div class="schedule-controls">
+
+                    <span class="schedule-badge" id="scheduleCountBadge">
+                        60 Months (5 Years)
+                    </span>
+
+                    <button type="button"
+                            class="btn btn-secondary btn-sm"
+                            id="exportCsvBtn">
+                        Export CSV
+                    </button>
+
+                </div>
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="schedule-table" id="scheduleTable">
+
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>EMI Amount</th>
+                            <th>Principal Paid</th>
+                            <th>Interest Paid</th>
+                            <th>Remaining Balance</th>
+                            <th>Loan Repaid</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="scheduleTableBody">
+                        <!-- JavaScript generates schedule rows -->
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="schedule-actions">
+
+                <button type="button"
+                        class="btn-toggle-schedule"
+                        id="toggleScheduleBtn">
+                    View Complete Schedule
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- FORMULA INFORMATION -->
+        <section class="info-section"
+                 id="infoSection"
+                 aria-label="Formula and Information">
+
+            <h2 class="info-title">
+                How EMI Is Calculated
+            </h2>
+
+            <div class="formula-card">
+                EMI = P × R × (1 + R)ᴺ / ((1 + R)ᴺ - 1)
+            </div>
+
+            <div class="formula-legend">
+
+                <div>
+                    <strong>P:</strong> Principal loan amount
+                </div>
+
+                <div>
+                    <strong>R:</strong> Monthly interest rate =
+                    Annual interest rate / 12 / 100
+                </div>
+
+                <div>
+                    <strong>N:</strong> Total monthly installments =
+                    Loan tenure in years × 12
+                </div>
+
+                <div>
+                    <strong>Total Interest:</strong>
+                    (EMI × N) − Principal
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer" id="appFooter">
+
+        <div class="footer-content">
+
+            <p>
+                <strong>EMI Calculator</strong> — Simple financial
+                calculations for home, personal, car and education loans.
+            </p>
+
+            <p>
+                This calculator uses the standard reducing-balance
+                monthly interest formula.
+            </p>
+
+            <div class="developer-info">
+                <p>Developed by</p>
+                <h2>Rahul A</h2>
+            </div>
+
+            <div class="project-purpose">
+                <h3>Project Purpose</h3>
+
+                <p>
+                    To practise Git, GitHub, Docker, Kubernetes, Jenkins
+                    and Terraform, and to automate application deployment
+                    to an AWS EC2 production server.
+                </p>
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript: Flask static folder -->
+    <script type="module"
+            src="{{ url_for('static', filename='js/script.js') }}">
+    </script>
+
+</body>
+</html>

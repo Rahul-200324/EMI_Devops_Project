@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EMI Calculator - User Registration</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #14b8a6
+            );
+
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .login-card {
+            background: #ffffff;
+
+            border-radius: 20px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.15);
+
+            animation: fadeIn 0.7s ease;
+        }
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo h1 {
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: 600;
+
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+
+            width: 100%;
+
+            padding: 12px 15px;
+
+            border: 2px solid #e5e7eb;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+
+            outline: none;
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 4px rgba(37, 99, 235, 0.15);
+        }
+
+        .form-group textarea {
+
+            resize: none;
+
+            height: 90px;
+        }
+
+        .btn {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+
+            background: #1d4ed8;
+
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+
+            background: #93c5fd;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        .success {
+
+            display: none;
+
+            margin-top: 15px;
+
+            text-align: center;
+
+            color: #16a34a;
+
+            font-weight: 600;
+
+            line-height: 1.6;
+        }
+
+        .error {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 10px;
+
+            border-radius: 8px;
+
+            background: #fee2e2;
+
+            color: #dc2626;
+
+            text-align: center;
+
+            font-weight: 600;
+
+            font-size: 14px;
+        }
+
+        .loading {
+
+            display: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="login-card">
+
+        <!-- Header -->
+
+        <div class="logo">
+
+            <h1>💰 EMI Calculator</h1>
+
+            <p>User Registration Form</p>
+
+        </div>
+
+
+        <!-- Registration Form -->
+
+        <form id="loginForm">
+
+            <!-- Full Name -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your 10-digit phone number"
+                    pattern="[0-9]{10}"
+                    maxlength="10"
+                    minlength="10"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Age -->
+
+            <div class="form-group">
+
+                <label for="age">
+                    Age
+                </label>
+
+                <input
+                    type="number"
+                    id="age"
+                    name="age"
+                    min="18"
+                    max="100"
+                    placeholder="Enter your age"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Purpose -->
+
+            <div class="form-group">
+
+                <label for="purpose">
+                    Purpose
+                </label>
+
+                <textarea
+                    id="purpose"
+                    name="purpose"
+                    placeholder="Why are you using this EMI Calculator?"
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- Submit Button -->
+
+            <button
+                type="submit"
+                class="btn"
+                id="submitBtn"
+            >
+
+                <span id="buttonText">
+                    Submit & Continue →
+                </span>
+
+                <span
+                    id="loadingText"
+                    class="loading"
+                >
+                    Saving Information...
+                </span>
+
+            </button>
+
+
+            <!-- Success Message -->
+
+            <div
+                class="success"
+                id="successMsg"
+            >
+
+                ✅ Information saved successfully.
+
+                <br>
+
+                Redirecting to EMI Calculator...
+
+            </div>
+
+
+            <!-- Error Message -->
+
+            <div
+                class="error"
+                id="errorMsg"
+            ></div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", async function(event) {
+
+        // Prevent normal form submission
+        event.preventDefault();
+
+
+        // Get HTML elements
+        const submitBtn =
+            document.getElementById("submitBtn");
+
+        const buttonText =
+            document.getElementById("buttonText");
+
+        const loadingText =
+            document.getElementById("loadingText");
+
+        const successMsg =
+            document.getElementById("successMsg");
+
+        const errorMsg =
+            document.getElementById("errorMsg");
+
+
+        // Hide previous messages
+        successMsg.style.display = "none";
+
+        errorMsg.style.display = "none";
+
+
+        // Get form values
+        const userData = {
+
+            name:
+                document
+                    .getElementById("name")
+                    .value
+                    .trim(),
+
+            email:
+                document
+                    .getElementById("email")
+                    .value
+                    .trim(),
+
+            phone:
+                document
+                    .getElementById("phone")
+                    .value
+                    .trim(),
+
+            age:
+                document
+                    .getElementById("age")
+                    .value,
+
+            purpose:
+                document
+                    .getElementById("purpose")
+                    .value
+                    .trim()
+
+        };
+
+
+        // Disable button while submitting
+        submitBtn.disabled = true;
+
+        buttonText.style.display = "none";
+
+        loadingText.style.display = "inline";
+
+
+        try {
+
+            /*
+             * Send user information to Flask backend.
+             *
+             * Flask endpoint:
+             *
+             * POST /api/register
+             */
+
+            const response = await fetch(
+                "/api/register",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(userData)
+                }
+            );
+
+
+            // Convert Flask response to JSON
+            const result =
+                await response.json();
+
+
+            // -----------------------------
+            // Registration successful
+            // -----------------------------
+
+            if (response.ok && result.success) {
+
+                successMsg.style.display =
+                    "block";
+
+                successMsg.innerHTML =
+                    `
+                    ✅ Information saved successfully.
+                    <br>
+                    Redirecting to EMI Calculator...
+                    `;
+
+
+                // Redirect to Flask /main route
+                setTimeout(function() {
+
+                    window.location.href =
+                        result.redirect || "/main";
+
+                }, 1500);
+
+            }
+
+
+            // -----------------------------
+            // Registration failed
+            // -----------------------------
+
+            else {
+
+                errorMsg.style.display =
+                    "block";
+
+                errorMsg.textContent =
+                    "❌ " +
+                    (
+                        result.message ||
+                        "Unable to register user."
+                    );
+
+
+                // Enable button again
+                submitBtn.disabled = false;
+
+                buttonText.style.display =
+                    "inline";
+
+                loadingText.style.display =
+                    "none";
+            }
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Registration Error:",
+                error
+            );
+
+
+            errorMsg.style.display =
+                "block";
+
+            errorMsg.textContent =
+                "❌ Unable to connect to the Flask server. " +
+                "Please make sure your backend is running.";
+
+
+            // Enable button again
+            submitBtn.disabled = false;
+
+            buttonText.style.display =
+                "inline";
+
+            loadingText.style.display =
+                "none";
+        }
+
+    });
+
+</script>
+
+</body>
+
+</html>
+
+
+
+
