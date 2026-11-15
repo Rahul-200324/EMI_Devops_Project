@@ -53,13 +53,8 @@ Open browser and open localhost:5008
 
 ---------------------------------------------------------------------------------------------------------------------------
 
-# Dockerfile 
+Dockerfile 
 
+FROM python:latest 
 
-FROM python:latest
-WORKDIR /app 
-COPY ..
-RUN pip install -r requirements.txt
-EXPOSE 5008
-CMD["python","app"]
--------------------------------------------------------------------------------------------------------------------------------
+WORKDIR /app
