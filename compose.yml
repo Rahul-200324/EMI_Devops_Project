@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: emi_calculator_container
+    environment:
+      MYSQL_HOST=mysql_container
+      MYSQL_USER=root
+      MYSQL_PASSWORD=root
+      MYSQL_DATABASE=devops
+    ports:
+        - 5008:5008
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD:root
+      MYSQL_DATABASE:devops
+      MYSQL_USER:root
+      MYSQL_PASSWORD:root
+      
+network:
+  mynetwork
+
+volume:
+  mysql_data:
+  
+
+        

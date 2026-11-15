@@ -1,0 +1,50 @@
+pipeline{
+    agent any
+    stages{
+        stage('GitHub Configuration') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/Rahul-200324/EMI_Devops_Project.git'
+            }
+        }
+        stage("Bulding image") {
+            steps {
+                echo " Building image using Docker"
+                bat'''
+                   docker build -t emi-calculator:v1 .
+                '''
+            }
+        }
+        
+        stage('Build Mysql image') {
+            steps {
+                echo 'Pulling MySQL image from Docker Hub'
+                bat 'docker pull mysql:latest'
+                
+             }
+        }
+
+        
+        stage("mysql container"){
+            steps{
+                echo"Running mysql container"
+                bat'''
+                  docker run -d --name mysql-container --network emi-network -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=emi_db mysql:latest
+                '''
+            }
+        }
+        stage("Testing the application"){
+            steps{
+                echo "Testing the application"
+            }
+        }
+        stage("Deploying the application"){
+            steps{
+                echo"Deploying the application using docker"
+                bat'''
+                  docker run -d --name emi-application-container --network emi-network -p 5009:5008 emi-calculator:v1
+                '''
+            }
+        }
+    }
+}
